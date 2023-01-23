@@ -4,6 +4,7 @@ using WebApiBasics.Models;
 namespace WebApiBasics.Controllers
 {
   [Route("[controller]")]
+  [ApiController]
   public class BeispielController
   {
     [HttpGet]
@@ -39,6 +40,28 @@ namespace WebApiBasics.Controllers
     public string HelloPerson(Person person)
     {
       return $"Hallo {person.Name}";
+    }
+
+    [HttpGet("Peng")]
+    public string Peng(ILogger<BeispielController> logger)
+    {
+      try
+      {
+        int i = 0;
+        int n = 10 / i;
+      }
+      catch (Exception ex)
+      {
+        logger.LogCritical(ex, "Peng peng...");
+      }
+
+      return "Peng löst eine Exception aus";
+    }
+
+    [HttpGet("firma")]
+    public string Firma(IConfiguration configuration)
+    {
+      return configuration["Firma:Name"];
     }
   }
 }

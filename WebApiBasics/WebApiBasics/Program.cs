@@ -1,8 +1,21 @@
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using WebApiBasics.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Dependency Injection einrichten
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
+
+// eigene DI-Definitionen hinzufügen
+builder.Services.AddSingleton<Personenliste>();
+
+builder.Services.AddSingleton<IBeispiel, A>();
+builder.Services.AddSingleton<IBeispiel, B>();
+builder.Services.AddSingleton<IBeispiel, C>();
+//builder.Services.TryAddSingleton<Personenliste>();
+
+
 
 var app = builder.Build();
 
