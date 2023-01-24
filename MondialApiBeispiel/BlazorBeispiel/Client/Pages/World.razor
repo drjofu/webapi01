@@ -1,0 +1,70 @@
+﻿@page "/world"
+@using MondialApiBeispiel.Models;
+@inject HttpClient Http
+
+<h3>World</h3>
+<div>
+  <button @onclick="LoadContinents">Laden</button>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Id</th>
+      <th>Area</th>
+    </tr>
+  </thead>
+  <tbody>
+    @if (continents is not null)
+    {
+      foreach (var continent in continents)
+      {
+        <tr>
+          <td>@continent.Name</td>
+          <td>@continent.Id</td>
+          <td>@continent.Area km²</td>
+          <td><button class="btn btn-success" @onclick="()=>GetCountries(continent.Id)">Countries</button></td>
+        </tr>
+      }
+    }
+  </tbody>
+</table>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Car code</th>
+      <th>Area</th>
+    </tr>
+  </thead>
+  <tbody>
+    @if(countries is not null)
+    {
+      foreach (var country in countries)
+      {
+        <tr>
+          <td>@country.Name</td>
+          <td>@country.CarCode</td>
+          <td>@country.Area km²</td>
+        </tr>
+      }
+    }
+  </tbody>
+</table>
+
+@code {
+  string url = "http://localhost:5255/World";
+  private IEnumerable<Continent> continents;
+  private IEnumerable<Country> countries;
+
+  private async Task GetCountries(string continentId)
+  {
+    countries = await Http.GetFromJsonAsync<IEnumerable<Country>>(url + "/countries?continentid=" + continentId);
+  }
+
+  private async Task LoadContinents()
+  {
+    continents = await Http.GetFromJsonAsync<IEnumerable<Continent>>(url);
+  }
+}

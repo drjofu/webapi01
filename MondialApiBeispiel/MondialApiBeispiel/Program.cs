@@ -12,6 +12,17 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<World>();
 
+builder.Services.AddCors(o =>
+{
+  o.AddPolicy("CORS", pb =>
+  {
+    pb.AllowAnyHeader();
+    pb.AllowAnyMethod();
+    pb.AllowAnyOrigin();
+    //pb.SetIsOriginAllowed(url => true);
+  });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -21,6 +32,7 @@ if (app.Environment.IsDevelopment())
   app.UseSwaggerUI();
 }
 
+app.UseCors("CORS");
 
 app.MapControllers();
 
