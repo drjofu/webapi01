@@ -15,7 +15,10 @@ builder.Services.AddSingleton<IBeispiel, B>();
 builder.Services.AddSingleton<IBeispiel, C>();
 //builder.Services.TryAddSingleton<Personenliste>();
 
-
+builder.Services.AddOptions<FirmaConfig>()
+  .Bind(builder.Configuration.GetSection("Firma"))
+  .ValidateDataAnnotations()
+  .ValidateOnStart();
 
 var app = builder.Build();
 

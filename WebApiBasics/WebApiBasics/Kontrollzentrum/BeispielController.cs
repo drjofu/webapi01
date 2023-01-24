@@ -1,12 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using WebApiBasics.Models;
 
 namespace WebApiBasics.Controllers
 {
   [Route("[controller]")]
   [ApiController]
-  public class BeispielController
+  public class Beispiel : ControllerBase
   {
+    private FirmaConfig firmaConfig;
+
+    public Beispiel(IOptions<FirmaConfig> firmaOptions)
+    {
+      firmaConfig = firmaOptions.Value;
+    }
+
+    [HttpGet("firmaconfig")]
+    public ActionResult<FirmaConfig> GetFirmaConfig()
+    {
+      return Ok(firmaConfig);
+    }
+
     [HttpGet]
     public string Get()
     {
@@ -43,7 +57,7 @@ namespace WebApiBasics.Controllers
     }
 
     [HttpGet("Peng")]
-    public string Peng(ILogger<BeispielController> logger)
+    public string Peng(ILogger<Beispiel> logger)
     {
       try
       {
@@ -61,7 +75,11 @@ namespace WebApiBasics.Controllers
     [HttpGet("firma")]
     public string Firma(IConfiguration configuration)
     {
-      return configuration["Firma:Name"];
+      FirmaConfig firmaConfig = new();
+      configuration.GetSection("Firma").Bind(firmaConfig);
+
+      int anzahlMitarbeiter = configuration.GetValue<int>("Firma:AnzahlMitarbeiter");
+      return configuration["Firma:Passwort"];
     }
   }
 }
